@@ -29,12 +29,22 @@ pipeline {
             }
         }
 
+        stage('Deploy Container') {
+            steps {
+                bat '''
+                    docker stop employee-app || exit 0
+                    docker rm employee-app || exit 0
+                    docker run -d -p 5000:5000 --name employee-app employee-management
+                '''
+            }
+        }
     }
 
     post {
 
         success {
-            echo 'BUILD SUCCESSFUL!'
+            echo 'CI/CD PIPELINE SUCCESSFUL!'
+            echo 'Application deployed successfully.'
         }
 
         failure {
